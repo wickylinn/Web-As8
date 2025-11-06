@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - Play Beat</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #3D3E40;
+      --accent-color: #E32C2B;
+      --bg1-color: #f5f5f5;
+    }
+
+    .dark-theme {
+      --bg-color: #30302f;
+      --text-color: #eaeaea;
+      --accent-color: #7fd367;
+      --bg1-color: #424241;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', sans-serif;
+      transition: background 0.3s, color 0.3s;
+      padding-top: 80px;
+    }
+
+    .navbar {
+      background-color: var(--bg1-color) !important;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .nav-link {
+      color: var(--text-color) !important;
+      font-weight: 500;
+      padding: 0.5rem 1rem !important;
+      border-radius: 20px;
+      transition: all 0.3s;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background: var(--accent-color) !important;
+      color: #ffffff !important;
+    }
+
+    .settings-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .settings-card {
+      background: var(--bg1-color);
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .settings-card h3 {
+      color: var(--accent-color);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--accent-color);
+    }
+
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+
+    .setting-info h5 {
+      margin: 0 0 5px 0;
+      font-size: 16px;
+    }
+
+    .setting-info p {
+      margin: 0;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    .form-control, .form-select {
+      background-color: var(--bg-color) !important;
+      color: var(--text-color) !important;
+      border: 2px solid #ddd !important;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--accent-color) !important;
+      box-shadow: 0 0 0 0.2rem rgba(227, 44, 43, 0.25) !important;
+    }
+
+    .btn-primary {
+      background-color: var(--accent-color) !important;
+      border-color: var(--accent-color) !important;
+      padding: 10px 25px;
+      font-weight: 600;
+    }
+
+    .btn-outline-secondary {
+      color: var(--text-color) !important;
+      border-color: var(--text-color) !important;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    .nav-header{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:1rem 3rem;background:var(--bg1-color);
+      box-shadow:0 2px 10px rgba(0,0,0,.1);
+      position:fixed;top:0;left:0;right:0;z-index:1000
+    }
+    .nav-left,.nav-right{display:flex;align-items:center;gap:1rem}
+    .danger-zone {
+      background: #fff5f5;
+      border: 2px solid #e74c3c;
+      border-radius: 15px;
+      padding: 25px;
+      margin-top: 30px;
+    }
+
+    .dark-theme .danger-zone {
+      background: #3a2020;
+    }
+    button{
+      background:var(--accent-color);
+      color:var(--bg-color);
+      font-weight:700;
+      border:0;
+      padding:12px 20px;
+      font-size:16px;
+      border-radius:100px;
+      cursor:pointer;
+      transition:all .2s
+    }
+    .btn-danger {
+      background-color: #e74c3c !important;
+      border-color: #e74c3c !important;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="nav-header">
+    <div class="nav-left">
+      <button onclick="window.location.href='index.html'">Home</button>
+      <button onclick="window.location.href='about.html'">About</button>
+      <button onclick="window.location.href='news.html'">News</button>
+      <button onclick="window.location.href='listen.html'">Start Listening</button>
+      <button onclick="toggleTheme()">Toggle Theme</button>
+    </div>
+    <div class="nav-right">
+      <button id="register-btn" onclick="window.location.href='register.html'">Register</button>
+      <button id="user-area" style="display:none;"></button>
+    </div>
+  </header>
+
+  <div class="settings-container">
+    <h1 class="mb-4">⚙️ Settings</h1>
+
+    <!-- Account Settings -->
+    <div class="settings-card">
+      <h3>👤 Account Settings</h3>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <h5>Change Username</h5>
+          <p>Update your display name</p>
+        </div>
+        <button class="btn btn-outline-secondary btn-sm" onclick="changeUsername()">Edit</button>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h5>Change Email</h5>
+          <p>Update your email address</p>
+        </div>
+        <button class="btn btn-outline-secondary btn-sm" onclick="changeEmail()">Edit</button>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h5>Change Password</h5>
+          <p>Update your password</p>
+        </div>
+        <button class="btn btn-outline-secondary btn-sm" onclick="changePassword()">Edit</button>
+      </div>
+    </div>
+
+    <!-- Notification Settings -->
+    <div class="settings-card">
+      <h3>🔔 Notifications</h3>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <h5>Email Notifications</h5>
+          <p>Receive updates via email</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="emailNotif" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h5>New Release Alerts</h5>
+          <p>Get notified about new music</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="releaseNotif" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h5>Friend Activity</h5>
+          <p>See what your friends are listening to</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="friendActivity">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Audio Settings -->
+    <div class="settings-card">
+      <h3>🎵 Audio & Playback</h3>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <h5>Audio Quality</h5>
+          <p>Select streaming quality</p>
+        </div>
+        <select class="form-select w-auto" id="audioQuality">
+          <option value="low">Low (96kbps)</option>
+          <option value="normal" selected>Normal (160kbps)</option>
+          <option value="high">High (320kbps)</option>
+        </select>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h5>Autoplay</h5>
+          <p>Continue playing similar tracks</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="autoplay" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h5>Crossfade</h5>
+          <p>Smooth transitions between songs</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="crossfade">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Privacy Settings -->
+    <div class="settings-card">
+      <h3>🔒 Privacy</h3>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <h5>Profile Visibility</h5>
+          <p>Who can see your profile</p>
+        </div>
+        <select class="form-select w-auto" id="privacy">
+          <option value="public">Public</option>
+          <option value="friends" selected>Friends Only</option>
+          <option value="private">Private</option>
+        </select>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h5>Show Listening Activity</h5>
+          <p>Let others see what you're playing</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="showActivity" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Language & Region -->
+    <div class="settings-card">
+      <h3>🌍 Language & Region</h3>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <h5>Language</h5>
+          <p>Select your preferred language</p>
+        </div>
+        <select class="form-select w-auto" id="language">
+          <option value="en" selected>English</option>
+          <option value="ru">Русский</option>
+          <option value="kz">Қазақша</option>
+        </select>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h5>Time Zone</h5>
+          <p>Your local time zone</p>
+        </div>
+        <select class="form-select w-auto" id="timezone">
+          <option value="utc+6" selected>UTC+6 (Astana)</option>
+          <option value="utc+3">UTC+3 (Moscow)</option>
+          <option value="utc+0">UTC+0 (London)</option>
+          <option value="utc-5">UTC-5 (New York)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="text-center my-4">
+      <button class="btn btn-primary btn-lg px-5" onclick="saveSettings()">💾 Save All Changes</button>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="danger-zone">
+      <h3 style="color: #e74c3c; margin-bottom: 15px;">⚠️ Danger Zone</h3>
+      <p style="margin-bottom: 20px;">These actions are irreversible. Please be certain.</p>
+      
+      <div class="d-flex gap-3 flex-wrap">
+        <button class="btn btn-outline-danger" onclick="clearData()">Clear All Data</button>
+        <button class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Load saved settings
+    window.addEventListener('DOMContentLoaded', () => {
+      const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+      
+      if (settings.emailNotif !== undefined) document.getElementById('emailNotif').checked = settings.emailNotif;
+      if (settings.releaseNotif !== undefined) document.getElementById('releaseNotif').checked = settings.releaseNotif;
+      if (settings.friendActivity !== undefined) document.getElementById('friendActivity').checked = settings.friendActivity;
+      if (settings.audioQuality) document.getElementById('audioQuality').value = settings.audioQuality;
+      if (settings.autoplay !== undefined) document.getElementById('autoplay').checked = settings.autoplay;
+      if (settings.crossfade !== undefined) document.getElementById('crossfade').checked = settings.crossfade;
+      if (settings.privacy) document.getElementById('privacy').value = settings.privacy;
+      if (settings.showActivity !== undefined) document.getElementById('showActivity').checked = settings.showActivity;
+      if (settings.language) document.getElementById('language').value = settings.language;
+      if (settings.timezone) document.getElementById('timezone').value = settings.timezone;
+    });
+
+    function saveSettings() {
+      const settings = {
+        emailNotif: document.getElementById('emailNotif').checked,
+        releaseNotif: document.getElementById('releaseNotif').checked,
+        friendActivity: document.getElementById('friendActivity').checked,
+        audioQuality: document.getElementById('audioQuality').value,
+        autoplay: document.getElementById('autoplay').checked,
+        crossfade: document.getElementById('crossfade').checked,
+        privacy: document.getElementById('privacy').value,
+        showActivity: document.getElementById('showActivity').checked,
+        language: document.getElementById('language').value,
+        timezone: document.getElementById('timezone').value
+      };
+
+      localStorage.setItem('userSettings', JSON.stringify(settings));
+      
+      const btn = event.target;
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '✅ Saved!';
+      btn.disabled = true;
+      
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }, 2000);
+    }
+
+    function changeUsername() {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const newName = prompt('Enter new username:', user.username || '');
+      
+      if (newName && newName.trim()) {
+        user.username = newName.trim();
+        localStorage.setItem('user', JSON.stringify(user));
+        alert('✅ Username updated successfully!');
+      }
+    }
+
+    function changeEmail() {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const newEmail = prompt('Enter new email:', user.email || '');
+      
+      if (newEmail && newEmail.includes('@')) {
+        user.email = newEmail.trim();
+        localStorage.setItem('user', JSON.stringify(user));
+        alert('✅ Email updated successfully!');
+      }
+    }
+
+    function changePassword() {
+      const currentPass = prompt('Enter current password:');
+      if (!currentPass) return;
+      
+      const newPass = prompt('Enter new password (min 8 characters):');
+      if (newPass && newPass.length >= 8) {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        user.password = newPass;
+        localStorage.setItem('user', JSON.stringify(user));
+        alert('✅ Password changed successfully!');
+      } else if (newPass) {
+        alert('❌ Password must be at least 8 characters long');
+      }
+    }
+
+    function clearData() {
+      if (confirm('⚠️ This will clear your playlist and listening history. Continue?')) {
+        localStorage.removeItem('playlist');
+        localStorage.removeItem('userFeedback');
+        localStorage.removeItem('subscribers');
+        alert('✅ Data cleared successfully!');
+      }
+    }
+
+    function deleteAccount() {
+      if (confirm('⚠️ This will permanently delete your account. This action cannot be undone. Are you sure?')) {
+        if (confirm('Are you absolutely sure? Type YES to confirm')) {
+          localStorage.clear();
+          alert('Account deleted. Redirecting to home page...');
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1500);
+        }
+      }
+    }
+  </script>
+  <script src="assignment7.js"></script>
+  <script src="toggleTheme.js"></script>
+  <script src="register.js"></script>
+</body>
+</html>
